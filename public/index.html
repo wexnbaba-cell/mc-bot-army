@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MC Bot Army — Kontrol Paneli</title>
+  <meta name="description" content="Minecraft Bot Ordusu Yönetim Paneli">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- HEADER -->
+  <header id="header">
+    <div class="header-left">
+      <div class="logo">
+        <span class="logo-icon">⚔</span>
+        <span class="logo-text">MC Bot Army</span>
+      </div>
+      <span class="version-tag">v1.0 — Minecraft 1.21.1</span>
+    </div>
+    <div class="header-right">
+      <div class="connection-status" id="connectionStatus">
+        <span class="status-dot offline"></span>
+        <span class="status-text">Bağlantı yok</span>
+      </div>
+      <div class="bot-counter" id="botCounter">
+        <span class="counter-label">Botlar:</span>
+        <span class="counter-value" id="botCountDisplay">0 / 0</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <!-- SOL PANEL: Bağlantı + Komutlar -->
+    <section class="panel panel-left">
+      <!-- BAĞLANTI FORMU -->
+      <div class="card" id="connectionCard">
+        <h2 class="card-title">
+          <span class="card-icon">🔗</span> Sunucu Bağlantısı
+        </h2>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="serverHost">Sunucu IP</label>
+            <input type="text" id="serverHost" placeholder="play.sunucu.com" value="localhost">
+          </div>
+          <div class="form-group">
+            <label for="serverPort">Port</label>
+            <input type="number" id="serverPort" placeholder="25565" value="25565">
+          </div>
+          <div class="form-group">
+            <label for="serverVersion">Versiyon</label>
+            <input type="text" id="serverVersion" placeholder="1.21.1" value="1.21.1">
+          </div>
+          <div class="form-group">
+            <label for="authMode">Auth</label>
+            <select id="authMode">
+              <option value="offline">Offline (Cracked)</option>
+              <option value="microsoft">Microsoft</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="ownerName">Senin İsmin (Sahip)</label>
+            <input type="text" id="ownerName" placeholder="Oyuncu adın">
+          </div>
+          <div class="form-group">
+            <label for="commanderName">Commander İsmi</label>
+            <input type="text" id="commanderName" placeholder="Commander" value="Commander">
+          </div>
+          <div class="form-group full-width">
+            <label for="botCount">Başlangıç Bot Sayısı: <span id="botCountLabel">5</span></label>
+            <input type="range" id="botCount" min="0" max="100" value="5">
+          </div>
+          <div class="form-group full-width">
+            <label for="connectDelay">Bağlantı Gecikmesi: <span id="delayLabel">1500</span>ms</label>
+            <input type="range" id="connectDelay" min="500" max="5000" step="100" value="1500">
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary" id="btnConnect">
+            <span class="btn-icon">▶</span> Bağlan
+          </button>
+          <button class="btn btn-danger" id="btnDisconnect" disabled>
+            <span class="btn-icon">■</span> Kes
+          </button>
+        </div>
+      </div>
+
+      <!-- KOMUT MERKEZİ -->
+      <div class="card" id="commandCard">
+        <h2 class="card-title">
+          <span class="card-icon">🎮</span> Komut Merkezi
+        </h2>
+        <div class="command-grid">
+          <button class="cmd-btn cmd-follow" data-cmd="follow" title="Tüm botlar seni takip etsin">
+            <span class="cmd-icon">🚶</span> Takip Et
+          </button>
+          <button class="cmd-btn cmd-attack" data-cmd="attack" title="Hedefe saldır">
+            <span class="cmd-icon">⚔️</span> Saldır
+          </button>
+          <button class="cmd-btn cmd-guard" data-cmd="guard" title="Bulunduğun noktayı koru">
+            <span class="cmd-icon">🛡️</span> Koru
+          </button>
+          <button class="cmd-btn cmd-scatter" data-cmd="scatter" title="Rastgele dağıl">
+            <span class="cmd-icon">💨</span> Dağıl
+          </button>
+          <button class="cmd-btn cmd-gather" data-cmd="gather" title="Yanına toplan">
+            <span class="cmd-icon">📍</span> Toplan
+          </button>
+          <button class="cmd-btn cmd-circle" data-cmd="circle" title="Etrafında dön">
+            <span class="cmd-icon">🔄</span> Çevir
+          </button>
+          <button class="cmd-btn cmd-jump" data-cmd="jump" title="Zıpla">
+            <span class="cmd-icon">⬆️</span> Zıpla
+          </button>
+          <button class="cmd-btn cmd-stop" data-cmd="stop" title="Hepsini durdur">
+            <span class="cmd-icon">✋</span> Durdur
+          </button>
+        </div>
+        <div class="bot-adjust">
+          <label>Bot Sayısı Ayarla:</label>
+          <div class="adjust-row">
+            <button class="btn btn-sm btn-outline" id="btnRemove5">-5</button>
+            <button class="btn btn-sm btn-outline" id="btnRemove1">-1</button>
+            <span class="adjust-count" id="liveCount">0</span>
+            <button class="btn btn-sm btn-outline" id="btnAdd1">+1</button>
+            <button class="btn btn-sm btn-outline" id="btnAdd5">+5</button>
+          </div>
+        </div>
+        <!-- Saldırı hedefi input -->
+        <div class="attack-target-row" id="attackTargetRow" style="display:none;">
+          <input type="text" id="attackTarget" placeholder="Hedef oyuncu ismi...">
+          <button class="btn btn-sm btn-danger" id="btnAttackConfirm">Saldır!</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORTA PANEL: Bot Listesi -->
+    <section class="panel panel-center">
+      <div class="card card-full">
+        <h2 class="card-title">
+          <span class="card-icon">🤖</span> Bot Ordusu
+          <span class="badge" id="onlineCount">0 online</span>
+        </h2>
+        <div class="bot-grid" id="botGrid">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">🤖</div>
+            <p>Henüz bot yok</p>
+            <p class="empty-sub">Sunucuya bağlanıp bot oluştur</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAĞ PANEL: Asistan + Log -->
+    <section class="panel panel-right">
+      <!-- ASİSTAN CHAT -->
+      <div class="card card-chat">
+        <h2 class="card-title">
+          <span class="card-icon">💬</span> Asistan
+        </h2>
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-msg system">
+            <span class="msg-text">Merhaba! Türkçe komut yazabilirsin. "yardım" yaz.</span>
+          </div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="chatInput" placeholder="Komut yaz... (ör: 5 bot oluştur)">
+          <button class="btn btn-primary btn-sm" id="btnSendChat">↵</button>
+        </div>
+      </div>
+
+      <!-- LOG KONSOLU -->
+      <div class="card card-log">
+        <h2 class="card-title">
+          <span class="card-icon">📋</span> Log
+          <button class="btn btn-sm btn-ghost" id="btnClearLog">Temizle</button>
+        </h2>
+        <div class="log-container" id="logContainer"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

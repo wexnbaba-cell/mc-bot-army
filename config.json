@@ -1,0 +1,23 @@
+{
+  "server": {
+    "host": "localhost",
+    "port": 25565,
+    "version": "1.21.1"
+  },
+  "auth": "offline",
+  "owner": "",
+  "commander": {
+    "username": "Commander",
+    "enabled": true
+  },
+  "bots": {
+    "nameTemplate": "Soldier_%d",
+    "maxCount": 100,
+    "connectDelay": 1500,
+    "autoReconnect": true,
+    "reconnectDelay": 5000
+  },
+  "web": {
+    "port": 3000
+  }
+}
