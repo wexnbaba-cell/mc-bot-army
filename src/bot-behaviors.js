@@ -144,7 +144,9 @@ const behaviors = {
   },
 
   stop(bot) {
-    bot.pathfinder.stop();
+    if (bot.pathfinder) {
+      bot.pathfinder.stop();
+    }
     bot.setControlState('jump', false);
     bot.setControlState('forward', false);
     bot.setControlState('sprint', false);
